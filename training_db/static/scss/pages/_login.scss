@@ -1,0 +1,45 @@
+.login{
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1f1f1;
+
+    &__form{
+        width:70rem;
+        background-color: #fff;
+
+        box-shadow: 0 .5rem .8rem;
+
+        height:50rem;
+        border-radius: 1rem;
+        
+    }
+
+    &__form-control{
+        text-align: center;
+        padding-top: 5rem;
+
+        & > label,
+        & > input{
+            display: inline-block;
+            width:80%;
+        }
+
+        & > label{
+            font-size: 2rem;
+            padding:.5rem;
+        }
+
+        & > input{
+            border: 1px solid #0000f0;
+            outline: none;
+            padding: 1rem;
+            font-family: inherit;
+            font-size: 2rem;
+            border-radius: 1rem;
+            
+        }
+    }
+}

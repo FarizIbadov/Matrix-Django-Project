@@ -1,0 +1,36 @@
+.btn{
+    &,
+    &:link,
+    &:visited{    
+        text-align: center;
+        display: inline-block;
+        border:none;
+        cursor: pointer;
+    }
+    
+    &--sm{
+        width:15rem;
+        padding:.7rem;
+        font-size: 1.2rem;
+        border-radius: .5rem;
+    }
+
+    &--md{
+        width:20rem;
+        padding:.8rem;
+        font-size: 1.6rem;
+        border-radius: .7rem;
+    }
+
+    &--lg{
+        width:25rem;
+        padding:1rem;
+        font-size: 2rem;
+        border-radius:1rem;
+    }
+
+    &--blue{
+        color: #fff;
+        background-color: #0000f0;
+    }
+}

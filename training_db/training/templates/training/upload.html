@@ -1,0 +1,22 @@
+{% extends 'base/nav.html' %}
+{% load static %}
+
+{% block content %}
+<!-- <h1>Upload</h1>
+<form action="" enctype="multipart/form-data"  method="post">
+    <table>
+        {{ form.as_table }}
+    </table>
+    {% csrf_token %}
+    <input type="submit" value="Submit">
+</form> -->
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    Select table to upload:
+    <input type="file" name="files" id="fileToUpload">
+    <input type="submit" value="Upload excel file" name="submit">
+</form>
+
+{% endblock content %}
+

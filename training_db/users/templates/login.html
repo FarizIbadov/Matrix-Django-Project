@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="login">
+        <form action="" method="POST" class="login__form">
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+          <ul class="errorlist nonfield">
+            <li>
+              Invalid username or password.
+            </li>
+          </ul>
+      {% endif %}
+          
+          {% for field in form %}
+            <div class="login__form-control">
+                  <label for="{{field.label}}">{{field.label}}</label>
+                 {{ field }}
+            </div> 
+            {% endfor%}
+            <div class="login__form-control">
+                <button class="btn btn--blue btn--lg" type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Navbar</title>
+</head>
+<body>
+    <header class="nav__bar">
+        <nav class="nav__list">
+            <h1 class="nav__logo">
+                <a href="#">Matrix</a>
+            </h1>
+
+            <ul class="nav__item-list">
+                <li class="nav__item"><a href="/training/matrix" class="nav__link nav__link--active">Training Matrix</a></li>
+                <li class="nav__item"><a href="/training/reports" class="nav__link">Reports</a></li>
+                <li class="nav__item"><a href="/training/search" class="nav__link">Search & Edit</a></li>
+                <li class="nav__item"><a href="/training/upload" class="nav__link">Upload</a></li>
+            </ul>
+
+            <div class="nav__logout">
+                <form action="" method="POST">
+                    <button type="submit" class="nav__logout-btn">Log out</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+    {% block content %}
+    
+    {% endblock content %}
+    
+</body>
+
+
+</html>
