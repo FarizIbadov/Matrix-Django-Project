@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormMixin, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, CreateView, ListView, DetailView
 # from rest_framework.views import APIView
 # from .forms import *
 from training.models import *
 from django.core.paginator import Paginator
+from django.contrib.auth import logout
+# from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 import django_excel as excel
 from pyexcel_xls import get_data as xls_get
 from pyexcel_xlsx import get_data as xlsx_get
@@ -17,20 +21,29 @@ from django.urls import reverse_lazy
 # def home(request):
 #     return render(request, 'training/matrix.html')
 
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect("/")
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'training/matrix.html'
+    context_object_name = 'matrix'
 
-class ReportView(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['groups']= TrainingGroup.objects.all()
+        return context
+
+class ReportView(LoginRequiredMixin, TemplateView):
     template_name = 'training/report.html'
 
-class SearchView(TemplateView):
+class SearchView(LoginRequiredMixin, TemplateView):
     template_name = 'training/search_edit.html'
 
-class EditView(TemplateView):
+class EditView(LoginRequiredMixin, TemplateView):
     template_name = 'training/edit.html'
 
-class UploadView(TemplateView):
+class UploadView(LoginRequiredMixin, TemplateView):
     template_name = 'training/upload.html'
 
 

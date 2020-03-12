@@ -53,3 +53,17 @@ class TrainingGroupAdmin(admin.ModelAdmin):
     list_display = ('title',)
     list_filter = ('title',)
     search_fields = ('title',)
+
+@admin.register(Matrix)
+class MatrixAdmin(admin.ModelAdmin):
+    fields = ('job','training', 'status',)
+    list_display = ('job','training', 'status',)
+    list_filter = ('job','training', 'status',)
+    search_fields = ('job','training', 'status',)
+
+# @admin.register(TrainingData)
+# class TrainingDataAdmin(admin.ModelAdmin):
+#     fields = ('emloyee','training', 'date',)
+#     list_display = ('emloyee','training', 'date',)
+#     list_filter = ('emloyee','training', 'date',)
+#     search_fields = ('emloyee','training', 'date',)

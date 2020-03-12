@@ -1,21 +1,27 @@
 from django.db import models
 
-# Create your models here.
+class TrainingGroup(models.Model):
+    title = models.CharField(max_length=200)
 
-# class Company(models.Model):
-#     KIND = (
-#         (0, "Corporate"),
-#         (1, "Start Up")
-#         )
+    def __str__(self):
+        return self.title
 
-#     name = models.CharField(max_length=50)
-#     address = models.CharField(max_length=100)
-#     kind = models.IntegerField(default=0, choices=KIND)
+    class Meta:
+        ordering=('title',)
+        verbose_name='Training group'
+        verbose_name_plural='Training groups'
 
-# class Job(models.Model):
-#     name = models.CharField(max_length=50)
-#     salary = models.IntegerField(default=0,null=True)
-#     company = models.ForeignKey(Company, on_delete=models.CASCADE,blank=True, null=True)
+class Training(models.Model):
+    training_group = models.ForeignKey(TrainingGroup, on_delete=models.CASCADE, blank=True, null=True)
+    title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering=('title', 'training_group',)
+        verbose_name='Training'
+        verbose_name_plural='Training'
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
@@ -63,6 +69,23 @@ class Job(models.Model):
         verbose_name='Job'
         verbose_name_plural='Jobs'
 
+class Matrix(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, blank=False, null=True)
+    training = models.ForeignKey(Training, on_delete=models.CASCADE,blank=False, null=True)
+    status = models.BooleanField(choices=(
+        (True, 'R'), 
+        (False, 'N/R')
+        ), default=False)
+
+    def __str__(self):
+         return f"{self.job.department} - {self.job.position}"
+
+    class Meta:
+        ordering=('job', 'training', 'status',)
+        verbose_name='Matrix'
+        verbose_name_plural='Matrix'
+
+
 class Employee(models.Model):
     name = models.CharField(max_length=200)
     badge = models.CharField(max_length=15)
@@ -72,37 +95,22 @@ class Employee(models.Model):
         (True, 'Active'), 
         (False, 'Inactive')
         ), default=True)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, blank=True, null=True)
+    job = models.ForeignKey(Matrix, on_delete=models.CASCADE, blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.badge)+ str(" - ") + str(self.name)
 
     class Meta:
-        ordering=('name', 'badge', 'start_date', 'status', 'job',)
+        ordering=('name', 'badge', 'start_date', 'status',)
         verbose_name='Employee'
         verbose_name_plural='Employees'
 
+# class TrainingData(models.Model):
+#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True, null=True)
+#     training = models.ForeignKey(Employee, to_field='job.training.title', on_delete=models.CASCADE, blank=True, null=True)
+#     date = models.DateField(auto_now=False, auto_now_add=False, blank=False, null=True)
+    
 
-class TrainingGroup(models.Model):
-    title = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.title
 
-    class Meta:
-        ordering=('title',)
-        verbose_name='Training group'
-        verbose_name_plural='Training groups'
-
-class Training(models.Model):
-    training_group = models.ForeignKey(TrainingGroup, on_delete=models.CASCADE, blank=True, null=True)
-    title = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        ordering=('title', 'training_group',)
-        verbose_name='Training'
-        verbose_name_plural='Training'
