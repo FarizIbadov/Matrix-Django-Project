@@ -1,4 +1,6 @@
 from django.db import models
+from import_export.admin import ImportExportModelAdmin
+from import_export import widgets
 
 class TrainingGroup(models.Model):
     title = models.CharField(max_length=200)
@@ -24,45 +26,45 @@ class Training(models.Model):
         verbose_name_plural='Training'
 
 class Location(models.Model):
-    name = models.CharField(max_length=100)
+    project = models.CharField(max_length=100)
     cost_code = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.name
+        return self.project
 
     class Meta:
-        ordering=('name', 'cost_code',)
+        ordering=('project', 'cost_code',)
         verbose_name='Location'
         verbose_name_plural='Locations'
 
 class Department(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         ordering=('name',)
-        verbose_name='Departmet'
+        verbose_name='Department'
         verbose_name_plural='Departments'
 
 class Position(models.Model):
-    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
     class Meta:
-        ordering=('name',)
+        ordering=('title',)
         verbose_name='Position'
         verbose_name_plural='Positions'
 
 class Job(models.Model):
-    department = models.ForeignKey(Department,on_delete=models.CASCADE,blank=False, null=True)
-    position = models.ForeignKey(Position,on_delete=models.CASCADE,blank=False, null=True)
+    department = models.ForeignKey(Department, to_field='name',on_delete=models.CASCADE,blank=False, null=True)
+    position = models.ForeignKey(Position, to_field='title',on_delete=models.CASCADE,blank=False, null=True)
 
     def __str__(self):
-        return str(self.department.name) + str(" - ") + str(self.position.name)
+        return str(self.department.name) + str(" - ") + str(self.position.title)
 
     class Meta:
         ordering=('department', 'position',)
@@ -87,8 +89,8 @@ class Matrix(models.Model):
 
 
 class Employee(models.Model):
+    badge = models.CharField(max_length=15, primary_key=True, unique=True)
     name = models.CharField(max_length=200)
-    badge = models.CharField(max_length=15)
     start_date = models.DateField(auto_now=False, auto_now_add=False, blank=False, null=True)
     end_date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     status = models.BooleanField(choices=(

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'users',
     'training',
+    'import_export',
 
     #  rest_framework
     'rest_framework',
