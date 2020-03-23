@@ -4,6 +4,7 @@ from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
 from import_export import widgets
 from import_export.widgets import ForeignKeyWidget
+from import_export.widgets import ManyToManyWidget
 
 from django.contrib import admin
 from django.utils.html import format_html_join
@@ -51,7 +52,12 @@ class JobResource(resources.ModelResource):
         column_name='position',
         attribute='position',
         widget=ForeignKeyWidget(Position, 'position'))
-
+    
+    training = fields.Field(
+        column_name='training',
+        attribute='training',
+        widget=ManyToManyWidget(Training,separator=',', field='title'))
+        
     class Meta:
         model=Job
         fields = ('id','department','position',)
@@ -59,7 +65,9 @@ class JobResource(resources.ModelResource):
 @admin.register(Job)
 class JobAdmin(ImportExportModelAdmin):
     list_display = ('id','department', 'position','get_training',)
+    search_fields = ('department__department','position__position',)
     filter_horizontal = ('training',)
+    list_filter = ('department__department','position__position',)
     resource_class = JobResource    
     # fields = ('department','position',)
     # list_filter = ('department','position',)
