@@ -38,33 +38,39 @@ class Location(models.Model):
         verbose_name_plural='Locations'
 
 class Department(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    department = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.department or ''
 
     class Meta:
-        ordering=('name',)
+        ordering=('department',)
         verbose_name='Department'
         verbose_name_plural='Departments'
 
 class Position(models.Model):
-    title = models.CharField(max_length=100, unique=True)
+    position = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.title
+        return self.position or ''
 
     class Meta:
-        ordering=('title',)
+        ordering=('position',)
         verbose_name='Position'
         verbose_name_plural='Positions'
 
 class Job(models.Model):
-    department = models.ForeignKey(Department, to_field='name',on_delete=models.CASCADE,blank=False, null=True)
-    position = models.ForeignKey(Position, to_field='title',on_delete=models.CASCADE,blank=False, null=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,blank=False, null=True)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE,blank=False, null=True)
+    training = models.ManyToManyField(Training)
+
+    def get_training(self):
+        return [p.title for p in self.training.all()][:3]
+  
+    # get_training.allow_tags = True
 
     def __str__(self):
-        return str(self.department.name) + str(" - ") + str(self.position.title)
+        return str(self.department.department) + str(" - ") + str(self.position.position)
 
     class Meta:
         ordering=('department', 'position',)

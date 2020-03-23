@@ -2,7 +2,12 @@ from django.contrib import admin
 from .models import *
 from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
+from import_export import widgets
 from import_export.widgets import ForeignKeyWidget
+
+from django.contrib import admin
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
 
 # Register your models here.
 
@@ -23,43 +28,67 @@ class LocationAdmin(ImportExportModelAdmin):
 
 @admin.register(Department)
 class DepartmentAdmin(ImportExportModelAdmin):
-    fields = ('name',)
-    list_display = ('name',)
-    list_filter = ('name',)
-    search_fields = ('name',)
+    fields = ('department',)
+    list_display = ('id','department',)
+    list_filter = ('department',)
+    search_fields = ('department',)
 
 @admin.register(Position)
 class PositionAdmin(ImportExportModelAdmin):
-    fields = ('title',)
-    list_display = ('title',)
-    list_filter = ('title',)
-    search_fields = ('title',)
+    fields = ('position',)
+    list_display = ('id','position',)
+    list_filter = ('position',)
+    search_fields = ('position',)
 
 
 class JobResource(resources.ModelResource):
     department = fields.Field(
         column_name='department',
-        attribute='Department',
-        widget=ForeignKeyWidget(Department, 'name'))
+        attribute='department',
+        widget=ForeignKeyWidget(Department, 'department'))
         
     position = fields.Field(
         column_name='position',
-        attribute='Position',
-        widget=ForeignKeyWidget(Position, 'title'))
+        attribute='position',
+        widget=ForeignKeyWidget(Position, 'position'))
 
     class Meta:
         model=Job
-        exclude = ('id',)
-        fields = ('department','position',)
+        fields = ('id','department','position',)
 
 @admin.register(Job)
 class JobAdmin(ImportExportModelAdmin):
-    list_display = ('department', 'position')
+    list_display = ('id','department', 'position','get_training',)
+    filter_horizontal = ('training',)
     resource_class = JobResource    
     # fields = ('department','position',)
-    # list_display = ('department','position',)
     # list_filter = ('department','position',)
     # search_fields = ('department','position',)
+    
+    def get_training(self, instance):
+        return format_html_join(
+            mark_safe('<br>'),
+            '{}',
+            ((line,) for line in instance.get_training()),
+        ) or mark_safe("<span class='errors'>Training is not assigned yet.</span>")
+    get_training.short_description = 'Training'
+    
+# class MyForeignKeyWidget(ForeignKeyWidget):
+#     def clean(self, value, row):
+#         t1 = super(widgets.ForeignKeyWidget, self).clean(value)
+#         return self.model.objects.get(id=t1) if t1 else None
+#     def render(self, value):
+#         return value.name
+
+# class JobResource(resources.ModelResource):
+#     department = fields.Field(column_name='department', attribute='department', widget=MyForeignKeyWidget(Department,))
+#     position = fields.Field(column_name='position', attribute='position', widget=MyForeignKeyWidget(Position,))
+
+#     class Meta:
+#         model=Job
+#         fields = ('id','department','position',)
+
+
 
 # @admin.register(Employee)
 # class EmployeeAdmin(admin.ModelAdmin):
