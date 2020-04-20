@@ -12,13 +12,6 @@ from django.utils.safestring import mark_safe
 
 # Register your models here.
 
-@admin.register(Employee)
-class EmployeeAdmin(ImportExportModelAdmin):
-    fields = ('badge', 'name','start_date','end_date','status', 'job','location',)
-    list_display = ('badge', 'name','start_date','end_date','status', 'job','location',)
-    list_filter = ('badge', 'name','start_date','end_date','status', 'job','location',)
-    search_fields = ('badge', 'name','start_date','end_date', 'job','location',)
-
 @admin.register(Location)
 class LocationAdmin(ImportExportModelAdmin):
     fields = ('project','cost_code',)
@@ -42,7 +35,7 @@ class PositionAdmin(ImportExportModelAdmin):
     search_fields = ('position',)
 
 
-class JobResource(resources.ModelResource):
+class TrainingMatrixResource(resources.ModelResource):
     department = fields.Field(
         column_name='department',
         attribute='department',
@@ -59,20 +52,19 @@ class JobResource(resources.ModelResource):
         widget=ManyToManyWidget(Training,separator=',', field='title'))
         
     class Meta:
-        model=Job
+        model=TrainingMatrix
         fields = ('id','department','position',)
 
-@admin.register(Job)
-class JobAdmin(ImportExportModelAdmin):
+@admin.register(TrainingMatrix)
+class TrainingMatrixAdmin(ImportExportModelAdmin):
     list_display = ('id','department', 'position','get_training',)
     search_fields = ('department__department','position__position',)
     filter_horizontal = ('training',)
     list_filter = ('department__department','position__position',)
-    resource_class = JobResource    
-    # fields = ('department','position',)
-    # list_filter = ('department','position',)
-    # search_fields = ('department','position',)
-    
+    resource_class = TrainingMatrixResource    
+    skip_unchanged = True
+    report_skipped = False
+
     def get_training(self, instance):
         return format_html_join(
             mark_safe('<br>'),
@@ -81,6 +73,44 @@ class JobAdmin(ImportExportModelAdmin):
         ) or mark_safe("<span class='errors'>Training is not assigned yet.</span>")
     get_training.short_description = 'Training'
     
+
+# class EmployeeResource(resources.ModelResource):
+#     job = fields.Field(
+#         column_name='department',
+#         attribute='department',
+#         widget=ForeignKeyWidget(Department, 'department'))
+        
+#     location = fields.Field(
+#         column_name='position',
+#         attribute='position',
+#         widget=ForeignKeyWidget(Position, 'position'))
+
+# @admin.register(TrainingMatrix)
+# class TrainingMatrixAdmin(ImportExportModelAdmin):
+#     list_display = ('id','department', 'position','get_training',)
+#     search_fields = ('department__department','position__position',)
+#     filter_horizontal = ('training',)
+#     list_filter = ('department__department','position__position',)
+#     resource_class = TrainingMatrixResource    
+    
+#     def get_training(self, instance):
+#         return format_html_join(
+#             mark_safe('<br>'),
+#             '{}',
+#             ((line,) for line in instance.get_training()),
+#         ) or mark_safe("<span class='errors'>Training is not assigned yet.</span>")
+#     get_training.short_description = 'Training'
+    
+
+@admin.register(Employee)
+class EmployeeAdmin(ImportExportModelAdmin):
+    fields = ('badge', 'name','start_date','end_date','status', 'job','location',)
+    list_display = ('badge', 'name','start_date','end_date','status', 'job','location',)
+    list_filter = ('badge', 'name','start_date','end_date','status', 'job','location',)
+    search_fields = ('badge', 'name','start_date','end_date', 'job','location',)
+
+
+
 # class MyForeignKeyWidget(ForeignKeyWidget):
 #     def clean(self, value, row):
 #         t1 = super(widgets.ForeignKeyWidget, self).clean(value)
@@ -116,12 +146,7 @@ class TrainingGroupAdmin(admin.ModelAdmin):
     list_filter = ('title',)
     search_fields = ('title',)
 
-@admin.register(Matrix)
-class MatrixAdmin(admin.ModelAdmin):
-    fields = ('job','training', 'status',)
-    list_display = ('job','training', 'status',)
-    list_filter = ('job','training', 'status',)
-    search_fields = ('job','training', 'status',)
+
 
 # @admin.register(TrainingData)
 # class TrainingDataAdmin(admin.ModelAdmin):

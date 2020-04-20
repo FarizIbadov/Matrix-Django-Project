@@ -32,6 +32,10 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['groups']= TrainingGroup.objects.all()
+        context['jobs']= TrainingMatrix.objects.all()
+        # context['trainingeqpm']= TrainingMatrix.objects.filter(training__training_group__title="Equipment").all()
+        context['trainingeqpm']= TrainingMatrix.objects.all()
+
         return context
 
 class ReportView(LoginRequiredMixin, TemplateView):

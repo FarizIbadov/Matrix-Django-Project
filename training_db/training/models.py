@@ -59,13 +59,50 @@ class Position(models.Model):
         verbose_name='Position'
         verbose_name_plural='Positions'
 
-class Job(models.Model):
+
+class TrainingMatrix(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE,blank=False, null=True)
     position = models.ForeignKey(Position, on_delete=models.CASCADE,blank=False, null=True)
     training = models.ManyToManyField(Training)
 
     def get_training(self):
         return [p.title for p in self.training.all()][:3]
+
+    def display_eqpm_training(self):
+        tr = set()
+        for training in self.training.all().filter(training_group__title="Equipment"):
+            tr.add(training.title)
+        if tr:
+            return tr
+        else:
+            return "N/A"
+
+    def display_sys_training(self):
+        tr = set()
+        for training in self.training.all().filter(training_group__title="System"):
+            tr.add(training.title)
+        if tr:
+            return tr
+        else:
+            return "N/A"
+
+    def display_thr_training(self):
+        tr = set()
+        for training in self.training.all().filter(training_group__title="Theoretical"):
+            tr.add(training.title)
+        if tr:
+            return tr
+        else:
+            return "N/A"
+
+    def display_prdt_training(self):
+        tr = set()
+        for training in self.training.all().filter(training_group__title="Product knowledge"):
+            tr.add(training.title)
+        if tr:
+            return tr
+        else:
+            return "N/A"
   
     # get_training.allow_tags = True
 
@@ -74,25 +111,11 @@ class Job(models.Model):
 
     class Meta:
         ordering=('department', 'position',)
-        verbose_name='Job'
-        verbose_name_plural='Jobs'
-
-class Matrix(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, blank=False, null=True)
-    training = models.ForeignKey(Training, on_delete=models.CASCADE,blank=False, null=True)
-    status = models.BooleanField(choices=(
-        (True, 'R'), 
-        (False, 'N/R')
-        ), default=False)
-
-    def __str__(self):
-         return f"{self.job.department} - {self.job.position}"
-
-    class Meta:
-        ordering=('job', 'training', 'status',)
-        verbose_name='Matrix'
-        verbose_name_plural='Matrix'
-
+        verbose_name='Training Assignement'
+        verbose_name_plural='Training Matrix'
+        constraints = [
+            models.UniqueConstraint(fields=['department', 'position'], name='job')
+        ]
 
 class Employee(models.Model):
     badge = models.CharField(max_length=15, primary_key=True, unique=True)
@@ -103,7 +126,7 @@ class Employee(models.Model):
         (True, 'Active'), 
         (False, 'Inactive')
         ), default=True)
-    job = models.ForeignKey(Matrix, on_delete=models.CASCADE, blank=True, null=True)
+    job = models.ForeignKey(TrainingMatrix, on_delete=models.CASCADE, blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

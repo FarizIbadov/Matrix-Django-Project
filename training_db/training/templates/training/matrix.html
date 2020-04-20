@@ -10,11 +10,49 @@
             <li class="main-page__header-item">Position</li>
             {% for group in groups %}
             <li class="main-page__header-item">{{group.title}}</li>
-
             {% endfor %}
         </ul>
+
         <ul class="main-page__list">
+            {% for job in jobs %}
             <li class="main-page__item">
+                <a class="main-page__item-edit" href="edit-training.html">
+                    <svg>
+                        <use xlink:href="/static/images/icons.svg#icon-pencil" />
+                    </svg>
+                </a>
+
+                <ul class="main-page__info-list">
+                    <li class="main-page__info-item">
+                        {{job.department}}
+                    </li>
+                    <li class="main-page__info-item">
+                        {{job.position}}
+                    </li>
+                    <li class="main-page__info-item">
+                        <select>
+                            <option value="#">{{ job.display_eqpm_training }}</option>
+                        </select>
+                    </li>
+                    <li class="main-page__info-item">
+                        <select>
+                            <option value="#">{{job.display_prdt_training}}</option>
+                        </select>
+                    </li>
+                    <li class="main-page__info-item">
+                        <select>
+                            <option value="#">{{job.display_sys_training}}</option>
+                        </select>
+                    </li>
+                    <li class="main-page__info-item">
+                        <select>
+                            <option value="#">{{job.display_thr_training}}</option>
+                        </select>
+                    </li>
+                </ul>
+            </li>
+            {% endfor %}
+            <!-- <li class="main-page__item">
                 <a class="main-page__item-edit" href="edit-training.html">
                     <svg>
                         <use xlink:href="/static/images/icons.svg#icon-pencil" />
@@ -121,43 +159,7 @@
                         </select>
                     </li>
                 </ul>
-            </li>
-            <li class="main-page__item">
-                <a class="main-page__item-edit" href="edit-training.html">
-                    <svg>
-                        <use xlink:href="/static/images/icons.svg#icon-pencil" />
-                    </svg>
-                </a>
-
-                <ul class="main-page__info-list">
-                    <li class="main-page__info-item">
-                        Administrator
-                    </li>
-                    <li class="main-page__info-item">
-                        Store manager
-                    </li>
-                    <li class="main-page__info-item">
-                        <select>
-                            <option value="#">Training</option>
-                        </select>
-                    </li>
-                    <li class="main-page__info-item">
-                        <select>
-                            <option value="#">Training</option>
-                        </select>
-                    </li>
-                    <li class="main-page__info-item">
-                        <select>
-                            <option value="#">Training</option>
-                        </select>
-                    </li>
-                    <li class="main-page__info-item">
-                        <select>
-                            <option value="#">Training</option>
-                        </select>
-                    </li>
-                </ul>
-            </li>
+            </li> -->
         </ul>
     </div>
 </main>
