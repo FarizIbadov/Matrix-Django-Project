@@ -3,8 +3,7 @@ from .models import *
 from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
 from import_export import widgets
-from import_export.widgets import ForeignKeyWidget
-from import_export.widgets import ManyToManyWidget
+from import_export.widgets import ForeignKeyWidget, ManyToManyWidget, DateWidget
 
 from django.contrib import admin
 from django.utils.html import format_html_join
@@ -53,11 +52,13 @@ class TrainingMatrixResource(resources.ModelResource):
         
     class Meta:
         model=TrainingMatrix
-        fields = ('id','department','position',)
+        exclude=('id',)
+        import_id_fields = ('department', 'position',)
+        fields = ('department','position','job',)
 
 @admin.register(TrainingMatrix)
 class TrainingMatrixAdmin(ImportExportModelAdmin):
-    list_display = ('id','department', 'position','get_training',)
+    list_display = ('id','department', 'position','get_training','job',)
     search_fields = ('department__department','position__position',)
     filter_horizontal = ('training',)
     list_filter = ('department__department','position__position',)
@@ -72,65 +73,88 @@ class TrainingMatrixAdmin(ImportExportModelAdmin):
             ((line,) for line in instance.get_training()),
         ) or mark_safe("<span class='errors'>Training is not assigned yet.</span>")
     get_training.short_description = 'Training'
-    
 
-# class EmployeeResource(resources.ModelResource):
-#     job = fields.Field(
-#         column_name='department',
-#         attribute='department',
-#         widget=ForeignKeyWidget(Department, 'department'))
-        
-#     location = fields.Field(
-#         column_name='position',
-#         attribute='position',
-#         widget=ForeignKeyWidget(Position, 'position'))
 
-# @admin.register(TrainingMatrix)
-# class TrainingMatrixAdmin(ImportExportModelAdmin):
-#     list_display = ('id','department', 'position','get_training',)
-#     search_fields = ('department__department','position__position',)
-#     filter_horizontal = ('training',)
-#     list_filter = ('department__department','position__position',)
-#     resource_class = TrainingMatrixResource    
+class EmployeeResource(resources.ModelResource):
+    start_date = fields.Field(
+        attribute='start_date', 
+        column_name='start_date', 
+        widget=DateWidget('%d/%m/%Y')) 
+    cost_code = fields.Field(
+        column_name='cost_code',
+        attribute='cost_code',
+        widget=ForeignKeyWidget(Location, 'cost_code'))
+    department = fields.Field(
+        column_name='department',
+        attribute='department',
+        widget=ForeignKeyWidget(Department, 'department'))
+    position = fields.Field(
+        column_name='position',
+        attribute='position',
+        widget=ForeignKeyWidget(Position, 'position'))
+    job = fields.Field(
+        column_name='job',
+        attribute='job',
+        widget=ForeignKeyWidget(TrainingMatrix, 'job'))
+
+    class Meta:
+        model=Employee
+        exclude = ('id',)
+        import_id_fields = ('badge',)
+        fields = ('badge', 'name','start_date','end_date','status','cost_code', 'department', 'position','job',)
+
     
-#     def get_training(self, instance):
-#         return format_html_join(
-#             mark_safe('<br>'),
-#             '{}',
-#             ((line,) for line in instance.get_training()),
-#         ) or mark_safe("<span class='errors'>Training is not assigned yet.</span>")
-#     get_training.short_description = 'Training'
-    
+    def before_save_instance(self, instance, using_transactions, dry_run):
+        if instance.job == TrainingMatrix.job:
+            return instance
+            
 
 @admin.register(Employee)
 class EmployeeAdmin(ImportExportModelAdmin):
-    fields = ('badge', 'name','start_date','end_date','status', 'job','location',)
-    list_display = ('badge', 'name','start_date','end_date','status', 'job','location',)
-    list_filter = ('badge', 'name','start_date','end_date','status', 'job','location',)
-    search_fields = ('badge', 'name','start_date','end_date', 'job','location',)
+    def project(self, obj):
+        return obj.cost_code.project
+
+    def required_training(self, instance):
+        return format_html_join(
+            mark_safe('<br>'),
+            '{}',
+            ((line,) for line in instance.job.training.all()),
+        ) or mark_safe("<span class='errors'>Training is not assigned yet.</span>")
+    required_training.short_description = 'Mandatory Training'
 
 
+    resource_class=EmployeeResource
+    # readonly_fields = ('badge',)
+    list_display = ('badge', 'name','start_date','end_date','status','cost_code', 'project','department', 'position','ifmt','ifmt_status','required_training',)
+    list_select_related = ['cost_code']
+    list_filter = ('status','ifmt_status','cost_code__cost_code','cost_code__project',)
+    search_fields = ('badge', 'name','start_date','end_date','cost_code__cost_code','cost_code__project','position__position', 'department__department','job__job',)
 
-# class MyForeignKeyWidget(ForeignKeyWidget):
-#     def clean(self, value, row):
-#         t1 = super(widgets.ForeignKeyWidget, self).clean(value)
-#         return self.model.objects.get(id=t1) if t1 else None
-#     def render(self, value):
-#         return value.name
-
-# class JobResource(resources.ModelResource):
-#     department = fields.Field(column_name='department', attribute='department', widget=MyForeignKeyWidget(Department,))
-#     position = fields.Field(column_name='position', attribute='position', widget=MyForeignKeyWidget(Position,))
-
-#     class Meta:
-#         model=Job
-#         fields = ('id','department','position',)
+class RequiredTrainingResource(resources.ModelResource):
+   
+    badge = fields.Field(
+        column_name='badge',
+        attribute='badge',
+        widget=ForeignKeyWidget(Employee, 'badge'))
+    training = fields.Field(
+        column_name='training',
+        attribute='training',
+        widget=ForeignKeyWidget(TrainingMatrix, 'training'))
 
 
+    class Meta:
+        model=RequiredTraining
+        exclude = ('id',)
+        import_id_fields = ('badge',)
+        fields = ('badge', 'training',)
 
-# @admin.register(Employee)
-# class EmployeeAdmin(admin.ModelAdmin):
-  
+
+@admin.register(RequiredTraining)
+class RequiredTrainingAdmin(ImportExportModelAdmin):
+
+    resource_class=RequiredTrainingResource
+    list_display = ('badge','training',)
+
 
 @admin.register(Training)
 class TrainingAdmin(admin.ModelAdmin):
@@ -145,12 +169,3 @@ class TrainingGroupAdmin(admin.ModelAdmin):
     list_display = ('title',)
     list_filter = ('title',)
     search_fields = ('title',)
-
-
-
-# @admin.register(TrainingData)
-# class TrainingDataAdmin(admin.ModelAdmin):
-#     fields = ('emloyee','training', 'date',)
-#     list_display = ('emloyee','training', 'date',)
-#     list_filter = ('emloyee','training', 'date',)
-#     search_fields = ('emloyee','training', 'date',)
