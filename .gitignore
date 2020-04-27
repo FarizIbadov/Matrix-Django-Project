@@ -1,2 +1,2 @@
-/node_modules
-.venv/*
+training_db/.venv/*
+training_db/.vscode
