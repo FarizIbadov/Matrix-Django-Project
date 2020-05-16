@@ -101,13 +101,30 @@ class EmployeeResource(resources.ModelResource):
         model=Employee
         exclude = ('id',)
         import_id_fields = ('badge',)
-        fields = ('badge', 'name','start_date','end_date','status','cost_code', 'department', 'position','job',)
+        fields = ('badge', 'name','start_date','end_date','status','cost_code', 'department', 'position','job','training',)
 
     
     def before_save_instance(self, instance, using_transactions, dry_run):
         if instance.job == TrainingMatrix.job:
             return instance
-            
+
+    # def after_save_instance(self, instance, using_transactions, dry_run):
+    #     if instance.department == TrainingMatrix.department and instance.position == TrainingMatrix.position:
+    #         instance.training = TrainingMatrix.training.all()
+    #         return instance
+
+
+    # def before_save_instance(self, instance, using_transactions, dry_run):
+    #    if instance.department == TrainingMatrix.department and instance.position == TrainingMatrix.position:
+    #         return instance
+
+    def init_instance(self, row, *args, **kwargs):
+        print ("I'm working")
+        for traininig in TrainingMatrix.objects.all():
+            if self.department__department == training.department__department and self.position__position == training.position__position:
+                self.training = training.id
+                self.training.save()
+                return instance
 
 @admin.register(Employee)
 class EmployeeAdmin(ImportExportModelAdmin):
@@ -125,7 +142,7 @@ class EmployeeAdmin(ImportExportModelAdmin):
 
     resource_class=EmployeeResource
     # readonly_fields = ('badge',)
-    list_display = ('badge', 'name','start_date','end_date','status','cost_code', 'project','department', 'position','ifmt','ifmt_status','required_training',)
+    list_display = ('badge', 'name','start_date','end_date','status','cost_code', 'project','department', 'position','ifmt','ifmt_status', 'required_training', 'training',)
     list_select_related = ['cost_code']
     list_filter = ('status','ifmt_status','cost_code__cost_code','cost_code__project',)
     search_fields = ('badge', 'name','start_date','end_date','cost_code__cost_code','cost_code__project','position__position', 'department__department','job__job',)

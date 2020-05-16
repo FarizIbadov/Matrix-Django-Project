@@ -68,7 +68,8 @@ class TrainingMatrix(models.Model):
     job = models.CharField(max_length=300, null=True, unique=True)
 
     def get_training(self):
-        return [p.title for p in self.training.all()][:3]
+        return [p.title for p in self.training.all()]
+        # return [p.title for p in self.training.all()][:3]
 
     def display_eqpm_training(self):
         tr = set()
@@ -131,7 +132,7 @@ class Employee(models.Model):
     cost_code = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True, related_name='costCode')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True,related_name='department_name')
     position = models.ForeignKey(Position, on_delete=models.CASCADE, null=True, blank=True,related_name='position_title')
-    # training = models.ForeignKey(TrainingMatrix, to_field='job', on_delete=models.CASCADE, null=True)
+    training = models.ForeignKey(TrainingMatrix, to_field='job', on_delete=models.CASCADE, null=True)
     job = models.ForeignKey(TrainingMatrix, on_delete=models.CASCADE, blank=True,null=True, related_name='checkjob')
     ifmt = models.FileField(upload_to='IFMT', blank=True, null=True)
     ifmt_status = models.BooleanField(choices=(
@@ -152,6 +153,10 @@ class Employee(models.Model):
             self.ifmt_status = 1
         else:
             self.ifmt_status=0
+        # if self.department.department == TrainingMatrix.department.department and self.position == TrainingMatrix.position:
+        #     self.training = TrainingMatrix.training
+        # else:
+        #     self.training = "no"
 
         super(Employee, self).save(*args, **kwargs)
 
