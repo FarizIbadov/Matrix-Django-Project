@@ -39,13 +39,16 @@ class HomeView(LoginRequiredMixin, TemplateView):
         return context
 
 class ReportView(LoginRequiredMixin, TemplateView):
-    template_name = 'training/report.html'
+    template_name = 'training/reports.html'
 
 class SearchView(LoginRequiredMixin, TemplateView):
     template_name = 'training/search_edit.html'
 
+class SearchEditView(LoginRequiredMixin, TemplateView):
+    template_name = 'training/search_edit-specific.html'
+
 class EditView(LoginRequiredMixin, TemplateView):
-    template_name = 'training/edit.html'
+    template_name = 'training/edit-training.html'
 
 class UploadView(LoginRequiredMixin, TemplateView):
     template_name = 'training/upload.html'

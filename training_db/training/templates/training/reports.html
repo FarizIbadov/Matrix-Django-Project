@@ -1,0 +1,165 @@
+{% extends 'base/nav.html' %}
+{% load static %}
+
+{% block content %}
+
+    <main>
+      <div class="reports__wrapper">
+        <ul class="reports__filter">
+          <li class="reports__filter-item">
+            <select name="group">
+              <option value="some">Choose Training group</option>
+            </select>
+          </li>
+          <li class="reports__filter-item">
+            <select name="title">
+              <option value="some">Choose Training title</option>
+            </select>
+          </li>
+          <li class="reports__filter-item">
+            <button type="submit" class="btn btn--blue btn--md">Submit</button>
+          </li>
+        </ul>
+
+        <div class="reports__result">
+          <h2>Result:</h2>
+          <div class="reports__count-table">
+            <ul class="reports__count-header">
+              <li class="reports__header">Training title</li>
+              <li class="reports__header">Training report</li>
+            </ul>
+            <ul class="reports__count-content">
+              <li class="reports__count-content-item">
+                <span>
+                  Total:
+                </span>
+                <a href="#">
+                  350
+                </a>
+              </li>
+              <li class="reports__count-content-item">
+                <span>
+                  Completed:
+                </span>
+                <a href="#">
+                  300
+                </a>
+              </li>
+              <li class="reports__count-content-item">
+                <span>
+                  Left:
+                </span>
+                <a href="#">
+                  50
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reports__result">
+          <div class="reports__result-table">
+            <ul class="reports__result-header">
+              <li class="reports__header">Code</li>
+              <li class="reports__header">Name</li>
+              <li class="reports__header">Departament</li>
+              <li class="reports__header">Position</li>
+              <li class="reports__header">Location</li>
+              <li class="reports__header">Project number</li>
+              <li class="reports__header">Start date</li>
+            </ul>
+            <ul class="reports__result-items">
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+{% endblock %}

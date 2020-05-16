@@ -1,0 +1,72 @@
+{% extends 'base/nav.html' %}
+{% load static %}
+
+{% block content %}
+
+    <main>
+      <div class="search_edit__table">
+        <div class="reports__result">
+          <div class="reports__result-table">
+            <ul class="reports__result-header">
+              <li class="reports__header">Code</li>
+              <li class="reports__header">Name</li>
+              <li class="reports__header">Departament</li>
+              <li class="reports__header">Position</li>
+              <li class="reports__header">Location</li>
+              <li class="reports__header">Project number</li>
+              <li class="reports__header">Start date</li>
+            </ul>
+            <ul class="reports__result-items">
+              <li class="reports__result-item">
+                <ul class="reports__result-item-list">
+                  <li class="reports__header">Code</li>
+                  <li class="reports__header">Name</li>
+                  <li class="reports__header">Departament</li>
+                  <li class="reports__header">Position</li>
+                  <li class="reports__header">Location</li>
+                  <li class="reports__header">Project number</li>
+                  <li class="reports__header">Start date</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <form action="#">
+        <div class="search_edit__specific-data">
+          <select>
+            <option>Chose training group</option>
+          </select>
+          <select>
+            <option>Chose training Title</option>
+          </select>
+
+          <label for="date">
+            <span>Add Date</span>
+            <svg>
+              <use xlink:href="/static/images/icons.svg#icon-calendar" />
+            </svg>
+          </label>
+          <input type="date" id="date" />
+        </div>
+        <div class="search_edit__file">
+          <input
+            type="text"
+            class="search_edit__file-name"
+            placeholder="Type trainer's name"
+          />
+          <div class="search_edit__file-upload">
+            <span>Upload File:</span>
+            <label for="file">
+              <svg>
+                <use xlink:href="/static/images/icons.svg#icon-download1" />
+              </svg>
+            </label>
+          </div>
+          <input type="file" id="file" />
+          <button class="btn btn--blue btn--lg">Submit</button>
+        </div>
+      </form>
+    </main>
+{% endblock content %}

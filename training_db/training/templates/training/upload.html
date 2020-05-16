@@ -2,21 +2,19 @@
 {% load static %}
 
 {% block content %}
-<!-- <h1>Upload</h1>
-<form action="" enctype="multipart/form-data"  method="post">
-    <table>
-        {{ form.as_table }}
-    </table>
-    {% csrf_token %}
-    <input type="submit" value="Submit">
-</form> -->
 
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    Select table to upload:
-    <input type="file" name="files" id="fileToUpload">
-    <input type="submit" value="Upload excel file" name="submit">
-</form>
+    <main>
+      <div class="upload__container">
+        <h3>IMPORT DATA CENTER</h3>
 
-{% endblock content %}
-
+        <div>
+          <form action="#">
+            <input type="file" name="file" />
+            <button class="btn btn--blue btn--sm" type="submit">
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+{% endblock %}
